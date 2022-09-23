@@ -113,6 +113,7 @@ def rankAdvisors(client, filtered_Advisors,percentage,match_list):
 
     return advisor_score,percentage,match_list
 
+
 @app.route('/api/v1/getlatlong', methods=['GET'])
 def getlatlong():
     print('inside get lat long')
@@ -121,11 +122,14 @@ def getlatlong():
     postalcode=postalcode.replace(" ", "")
     postalcode = postalcode.lower()
     print('postalcode',postalcode)
-    df_canada_zip_codes=pd.read_csv('./config/CanadianPostalCodes202208.csv')
+    df_canada_zip_codes1=pd.read_csv('./config/canpostal1.csv')
+    df_canada_zip_codes2 = pd.read_csv('./config/canpostal2.csv')
+    df_canada_zip_codes3 = pd.read_csv('./config/canpostal3.csv')
+    df_canada_zip_codes=pd.concat([df_canada_zip_codes1, df_canada_zip_codes2,df_canada_zip_codes3], ignore_index=True)
     df_canada_zip_codes['POSTAL_CODE']=df_canada_zip_codes['POSTAL_CODE'].str.replace(" ", "")
     df_canada_zip_codes['POSTAL_CODE'] = df_canada_zip_codes['POSTAL_CODE'].str.lower()
     result=df_canada_zip_codes[df_canada_zip_codes['POSTAL_CODE']==postalcode].head(1)
-    if result:
+    if not result.empty:
         response={'lat':result.LATITUDE.iloc[0],'long':result.LONGITUDE.iloc[0]}
     print('response', response)
     return json.dumps(response, cls=NpEncoder)
