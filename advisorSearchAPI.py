@@ -116,7 +116,11 @@ def rankAdvisors(client, filtered_Advisors,percentage,match_list):
 def search_advisor():
     print('start')
     df_clients = request.json
+    print('after request read')
+    print('df_clients:',df_clients)
     df_advisors = getAdvisors()
+    print('after advisors')
+    print('df_advisors:',df_advisors)
     filtered_Advisors, percentage, match_list = filteredAdvisors(df_clients, df_advisors)
     print('after filtered_Advisors')
     advisor_score, percentage, match_list = rankAdvisors(df_clients, filtered_Advisors, percentage, match_list)
