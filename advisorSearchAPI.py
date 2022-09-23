@@ -21,8 +21,11 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 def getAdvisors():
+    print('in advisors')
     response = requests.get("https://fundevolve02.herokuapp.com/api/advisors/list")
+    print('response',response)
     response=pd.json_normalize(response.json())
+    print('response',response)
     response=response.explode('languages')
     response=response.explode('specializations')
     return response
