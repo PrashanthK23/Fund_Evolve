@@ -113,7 +113,22 @@ def rankAdvisors(client, filtered_Advisors,percentage,match_list):
 
     return advisor_score,percentage,match_list
 
-
+@app.route('/api/v1/getlatlong', methods=['GET'])
+def getlatlong():
+    print('inside get lat long')
+    response={}
+    postalcode = request.args.get('postalcode')
+    postalcode=postalcode.replace(" ", "")
+    postalcode = postalcode.lower()
+    print('postalcode',postalcode)
+    df_canada_zip_codes=pd.read_csv('./config/CanadianPostalCodes202208.csv')
+    df_canada_zip_codes['POSTAL_CODE']=df_canada_zip_codes['POSTAL_CODE'].str.replace(" ", "")
+    df_canada_zip_codes['POSTAL_CODE'] = df_canada_zip_codes['POSTAL_CODE'].str.lower()
+    result=df_canada_zip_codes[df_canada_zip_codes['POSTAL_CODE']==postalcode].head(1)
+    if result:
+        response={'lat':result.LATITUDE.iloc[0],'long':result.LONGITUDE.iloc[0]}
+    print('response', response)
+    return json.dumps(response, cls=NpEncoder)
 
 @app.route('/api/v1/searchadvisor', methods=['GET', 'POST'])
 def search_advisor():
