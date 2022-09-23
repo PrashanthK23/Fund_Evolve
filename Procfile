@@ -1,1 +1,1 @@
-web: gunicorn advisorSearchAPI:app --log-file .
+web: gunicorn advisorSearchAPI:app
